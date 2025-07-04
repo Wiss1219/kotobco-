@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useStore } from '@/store/useStore';
 import { Product } from '@/types';
-import { ShoppingCart, Star, Heart, Eye } from 'lucide-react';
+import { ShoppingCart, Star, Heart, Eye, Bookmark, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 
@@ -19,6 +19,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { addToCart } = useStore();
   const { toast } = useToast();
   const [isHovered, setIsHovered] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -31,118 +32,189 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     });
   };
 
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsWishlisted(!isWishlisted);
+    toast({
+      title: isWishlisted 
+        ? (isRTL ? "تم الحذف من المفضلة" : "Removed from Wishlist")
+        : (isRTL ? "تم الإضافة للمفضلة" : "Added to Wishlist"),
+      description: isWishlisted 
+        ? (isRTL ? "تم حذف المنتج من قائمة المفضلة" : "Product removed from wishlist")
+        : (isRTL ? "تم إضافة المنتج لقائمة المفضلة" : "Product added to wishlist"),
+    });
+  };
+
   const title = isRTL ? product.titleAr : product.title;
   const author = isRTL ? product.authorAr : product.author;
 
   return (
     <Link to={`/product/${product.id}`}>
       <Card 
-        className="group cursor-pointer overflow-hidden card-premium h-full flex flex-col relative"
+        className="group cursor-pointer overflow-hidden card-luxury h-full flex flex-col relative transition-all duration-500"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Product Image */}
+        {/* Product Image Container */}
         <div className="aspect-[3/4] overflow-hidden relative">
           <img
             src={product.image}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
           
-          {/* Overlay with actions */}
-          <div className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-2 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          {/* Gradient Overlay */}
+          <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}></div>
+          
+          {/* Action Buttons Overlay */}
+          <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <Button
               size="icon"
               variant="secondary"
-              className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
+              className="glass-morphism hover:bg-white/90 text-gray-800 shadow-luxury hover-glow"
+              onClick={handleWishlist}
             >
-              <Heart className="h-4 w-4" />
+              <Heart className={`h-4 w-4 transition-colors ${isWishlisted ? 'fill-red-500 text-red-500' : ''}`} />
             </Button>
             <Button
               size="icon"
               variant="secondary"
-              className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
+              className="glass-morphism hover:bg-white/90 text-gray-800 shadow-luxury hover-glow"
             >
               <Eye className="h-4 w-4" />
             </Button>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="glass-morphism hover:bg-white/90 text-gray-800 shadow-luxury hover-glow"
+            >
+              <Bookmark className="h-4 w-4" />
+            </Button>
           </div>
 
-          {/* Featured badge */}
-          {product.featured && (
-            <div className="absolute top-3 left-3">
-              <Badge className="bg-yellow-500 text-yellow-900 font-semibold">
+          {/* Top Badges */}
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
+            {product.featured && (
+              <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-luxury animate-pulse-luxury">
                 <Star className="h-3 w-3 mr-1" />
                 {isRTL ? 'مميز' : 'Featured'}
               </Badge>
-            </div>
-          )}
+            )}
+            {!product.inStock && (
+              <Badge variant="destructive" className="font-semibold shadow-luxury">
+                {isRTL ? "نفد المخزون" : "Out of Stock"}
+              </Badge>
+            )}
+          </div>
 
-          {/* Stock status */}
-          <div className="absolute top-3 right-3">
+          {/* Category Badge */}
+          <div className="absolute top-4 right-4">
             <Badge 
-              variant={product.inStock ? "default" : "destructive"}
-              className={product.inStock ? "bg-green-500" : ""}
+              variant="outline" 
+              className="glass-morphism border-white/30 text-white font-semibold"
             >
-              {product.inStock 
-                ? (isRTL ? "متوفر" : "In Stock")
-                : (isRTL ? "نفد" : "Out of Stock")
-              }
+              {product.category === 'religious' ? (isRTL ? "ديني" : "Religious") : (isRTL ? "عام" : "General")}
             </Badge>
+          </div>
+
+          {/* Quick Add Button */}
+          <div className={`absolute bottom-4 left-4 right-4 transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <Button 
+              onClick={handleAddToCart}
+              disabled={!product.inStock}
+              className="w-full btn-luxury text-white flex items-center justify-center gap-2 py-3 font-semibold"
+              size="sm"
+            >
+              <ShoppingCart className="h-4 w-4" />
+              {product.inStock 
+                ? (isRTL ? "إضافة سريعة" : "Quick Add")
+                : (isRTL ? "غير متوفر" : "Unavailable")
+              }
+            </Button>
           </div>
         </div>
         
+        {/* Product Info */}
         <CardContent className="p-6 flex-1">
-          <div className="space-y-3">
-            <Badge variant="outline" className="text-xs border-red-200 text-red-600">
-              {product.category === 'religious' ? (isRTL ? "ديني" : "Religious") : (isRTL ? "عام" : "General")}
-            </Badge>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-bold text-lg line-clamp-2 group-hover:text-primary transition-colors leading-tight mb-2">
+                {title}
+              </h3>
+              
+              {author && (
+                <p className="text-sm text-muted-foreground line-clamp-1 mb-3">
+                  {isRTL ? "المؤلف: " : "By "}{author}
+                </p>
+              )}
+            </div>
             
-            <h3 className="font-bold text-lg line-clamp-2 group-hover:text-red-600 transition-colors leading-tight">
-              {title}
-            </h3>
-            
-            {author && (
-              <p className="text-sm text-muted-foreground line-clamp-1">
-                {isRTL ? "المؤلف: " : "By "}{author}
-              </p>
-            )}
-            
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-              ))}
-              <span className="text-xs text-muted-foreground ml-2">(4.8)</span>
+            {/* Rating */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <span className="text-xs text-muted-foreground">(4.8)</span>
+              <Badge variant="outline" className="text-xs ml-auto">
+                <Zap className="h-3 w-3 mr-1" />
+                {isRTL ? "الأكثر مبيعاً" : "Bestseller"}
+              </Badge>
+            </div>
+
+            {/* Stock Status */}
+            <div className="flex items-center justify-between">
+              <Badge 
+                variant={product.inStock ? "default" : "destructive"}
+                className={`text-xs ${product.inStock ? "bg-green-100 text-green-800 hover:bg-green-200" : ""}`}
+              >
+                {product.inStock 
+                  ? (isRTL ? "متوفر" : "In Stock")
+                  : (isRTL ? "نفد" : "Out of Stock")
+                }
+              </Badge>
+              {product.inStock && (
+                <span className="text-xs text-green-600 font-medium">
+                  {isRTL ? "توصيل مجاني" : "Free Delivery"}
+                </span>
+              )}
             </div>
           </div>
         </CardContent>
         
-        <CardFooter className="p-6 pt-0 flex items-center justify-between">
+        {/* Product Footer */}
+        <CardFooter className="p-6 pt-0 flex items-center justify-between border-t border-border/50">
           <div className="flex flex-col">
-            <span className="text-2xl font-bold text-red-600">
-              {product.price.toFixed(2)}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {isRTL ? "د.ت" : "TND"}
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-gradient-primary">
+                {product.price.toFixed(2)}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {isRTL ? "د.ت" : "TND"}
+              </span>
+            </div>
+            <span className="text-xs text-green-600 font-medium">
+              {isRTL ? "أفضل سعر" : "Best Price"}
             </span>
           </div>
           
           <Button 
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="btn-premium text-white flex items-center gap-2 px-6"
+            variant="outline"
+            className="border-primary/20 hover:bg-primary hover:text-white transition-all duration-300 hover-glow"
             size="sm"
           >
             <ShoppingCart className="h-4 w-4" />
-            {product.inStock 
-              ? (isRTL ? "أضف للسلة" : "Add to Cart")
-              : (isRTL ? "غير متوفر" : "Unavailable")
-            }
           </Button>
         </CardFooter>
+
+        {/* Hover Glow Effect */}
+        <div className={`absolute inset-0 rounded-lg transition-opacity duration-300 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="absolute inset-0 rounded-lg shadow-luxury-lg"></div>
+        </div>
       </Card>
     </Link>
   );
