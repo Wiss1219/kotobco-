@@ -22,7 +22,6 @@ import {
   Heart,
   User,
   Star,
-  Sparkles,
   Bell
 } from 'lucide-react';
 
@@ -42,56 +41,53 @@ export const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-morphism border-b border-border/50 backdrop-blur-luxury">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-border/50">
       <div className="container mx-auto px-4">
-        <div className="flex h-20 items-center justify-between">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-all duration-300 group">
+          <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity group">
             <div className="relative">
-              <div className="w-14 h-14 bg-gradient-to-br from-primary to-accent rounded-3xl flex items-center justify-center shadow-luxury group-hover:shadow-luxury-lg transition-all duration-300 group-hover:scale-105">
-                <BookOpen className="h-8 w-8 text-white" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center animate-pulse-luxury">
-                <Sparkles className="h-3 w-3 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                <BookOpen className="h-6 w-6 text-white" />
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold text-gradient-primary font-arabic">
+              <span className="text-lg font-bold text-gradient-primary font-arabic">
                 كُتُبْكُمْ
               </span>
-              <span className="text-xs text-muted-foreground -mt-1 font-medium">
-                Premium Bookstore
+              <span className="text-xs text-muted-foreground -mt-1">
+                Bookstore
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             <Link 
               to="/general-books" 
-              className="text-sm font-semibold hover:text-primary transition-all duration-300 relative group py-2"
+              className="text-sm font-medium hover:text-primary transition-colors relative group py-2"
             >
               {t('generalBooks')}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link 
               to="/religious-books" 
-              className="text-sm font-semibold hover:text-primary transition-all duration-300 relative group py-2"
+              className="text-sm font-medium hover:text-primary transition-colors relative group py-2"
             >
               {t('religiousBooks')}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link 
               to="/track-order" 
-              className="text-sm font-semibold hover:text-primary transition-all duration-300 relative group py-2"
+              className="text-sm font-medium hover:text-primary transition-colors relative group py-2"
             >
               {t('trackOrder')}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </Link>
           </nav>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             {/* Search */}
             <div className="relative hidden md:block">
               {isSearchOpen ? (
@@ -99,14 +95,14 @@ export const Header = () => {
                   <input 
                     type="text" 
                     placeholder={isRTL ? "البحث..." : "Search..."}
-                    className="w-64 px-4 py-2 rounded-full border border-border bg-background/50 backdrop-blur-sm focus-luxury transition-all duration-300"
+                    className="w-48 px-3 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                     autoFocus
                   />
                   <Button 
                     variant="ghost" 
-                    size="icon" 
+                    size="sm" 
                     onClick={() => setIsSearchOpen(false)}
-                    className="ml-2"
+                    className="ml-1"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -114,8 +110,8 @@ export const Header = () => {
               ) : (
                 <Button 
                   variant="ghost" 
-                  size="icon" 
-                  className="hover:bg-primary/10 hover:text-primary transition-all duration-300 hover-glow"
+                  size="sm" 
+                  className="hover:bg-primary/10 hover:text-primary transition-colors"
                   onClick={() => setIsSearchOpen(true)}
                 >
                   <Search className="h-4 w-4" />
@@ -126,23 +122,23 @@ export const Header = () => {
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-all duration-300 hover-glow">
+                <Button variant="ghost" size="sm" className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-colors">
                   <Globe className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44 card-luxury border-border/50">
+              <DropdownMenuContent align="end" className="w-36">
                 {languages.map((lang) => (
                   <DropdownMenuItem
                     key={lang.code}
                     onClick={() => setLanguage(lang.code as any)}
                     className={cn(
-                      "flex items-center space-x-3 cursor-pointer hover:bg-primary/10 transition-all duration-300",
+                      "flex items-center space-x-2 cursor-pointer",
                       language === lang.code && "bg-primary/10 text-primary"
                     )}
                   >
-                    <span className="text-lg">{lang.flag}</span>
-                    <span className="font-medium">{lang.name}</span>
-                    {language === lang.code && <Star className="h-4 w-4 ml-auto text-primary" />}
+                    <span>{lang.flag}</span>
+                    <span className="text-sm">{lang.name}</span>
+                    {language === lang.code && <Star className="h-3 w-3 ml-auto" />}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -152,33 +148,27 @@ export const Header = () => {
             <ThemeToggle />
 
             {/* Notifications */}
-            <Button variant="ghost" size="icon" className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-all duration-300 hover-glow relative">
+            <Button variant="ghost" size="sm" className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-colors relative">
               <Bell className="h-4 w-4" />
               <Badge 
                 variant="destructive" 
-                className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs bg-gradient-to-r from-red-500 to-pink-500 animate-pulse-luxury"
+                className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs"
               >
                 3
               </Badge>
             </Button>
 
             {/* Wishlist */}
-            <Button variant="ghost" size="icon" className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-all duration-300 hover-glow relative">
+            <Button variant="ghost" size="sm" className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-colors relative">
               <Heart className="h-4 w-4" />
-              <Badge 
-                variant="destructive" 
-                className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs bg-gradient-to-r from-pink-500 to-red-500"
-              >
-                0
-              </Badge>
             </Button>
 
             {/* Admin Login/Dashboard Button */}
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
               onClick={() => navigate(isAdmin ? '/admin/dashboard' : '/admin/login')}
-              className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-all duration-300 hover-glow"
+              className="hidden sm:flex hover:bg-primary/10 hover:text-primary transition-colors"
             >
               <User className="h-4 w-4" />
             </Button>
@@ -186,15 +176,15 @@ export const Header = () => {
             {/* Cart */}
             <Button
               variant="ghost"
-              size="icon"
-              className="relative hover:bg-primary/10 hover:text-primary transition-all duration-300 hover-glow group"
+              size="sm"
+              className="relative hover:bg-primary/10 hover:text-primary transition-colors"
               onClick={() => navigate('/cart')}
             >
-              <ShoppingCart className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
+              <ShoppingCart className="h-4 w-4" />
               {cartItemsCount > 0 && (
                 <Badge 
                   variant="destructive" 
-                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-gradient-to-r from-primary to-accent animate-pulse-luxury shadow-luxury"
+                  className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs bg-primary"
                 >
                   {cartItemsCount}
                 </Badge>
@@ -204,8 +194,8 @@ export const Header = () => {
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
-              size="icon"
-              className="lg:hidden hover:bg-primary/10 hover:text-primary transition-all duration-300"
+              size="sm"
+              className="lg:hidden hover:bg-primary/10 hover:text-primary transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
@@ -219,45 +209,45 @@ export const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-border/50 glass-morphism">
-            <nav className="flex flex-col space-y-4 px-4 py-6">
+          <div className="lg:hidden border-t border-border/50 bg-background/95 backdrop-blur-sm">
+            <nav className="flex flex-col space-y-2 px-4 py-4">
               {/* Mobile Search */}
-              <div className="relative mb-4">
+              <div className="relative mb-3">
                 <input 
                   type="text" 
                   placeholder={isRTL ? "البحث في الكتب..." : "Search books..."}
-                  className="w-full px-4 py-3 rounded-2xl border border-border bg-background/50 backdrop-blur-sm focus-luxury"
+                  className="w-full px-4 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               </div>
 
               <Link 
                 to="/general-books" 
-                className="text-sm font-semibold hover:text-primary transition-colors py-3 px-2 rounded-lg hover:bg-primary/10"
+                className="text-sm font-medium hover:text-primary transition-colors py-2 px-2 rounded-lg hover:bg-primary/10"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {t('generalBooks')}
               </Link>
               <Link 
                 to="/religious-books" 
-                className="text-sm font-semibold hover:text-primary transition-colors py-3 px-2 rounded-lg hover:bg-primary/10"
+                className="text-sm font-medium hover:text-primary transition-colors py-2 px-2 rounded-lg hover:bg-primary/10"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {t('religiousBooks')}
               </Link>
               <Link 
                 to="/track-order" 
-                className="text-sm font-semibold hover:text-primary transition-colors py-3 px-2 rounded-lg hover:bg-primary/10"
+                className="text-sm font-medium hover:text-primary transition-colors py-2 px-2 rounded-lg hover:bg-primary/10"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {t('trackOrder')}
               </Link>
               
-              <div className="flex items-center justify-between py-3 px-2">
-                <span className="text-sm font-semibold">
+              <div className="flex items-center justify-between py-2 px-2">
+                <span className="text-sm font-medium">
                   {isRTL ? "الإشعارات" : "Notifications"}
                 </span>
-                <Badge variant="destructive" className="bg-gradient-to-r from-red-500 to-pink-500">
+                <Badge variant="destructive" className="bg-primary">
                   3
                 </Badge>
               </div>
@@ -268,15 +258,15 @@ export const Header = () => {
                   navigate(isAdmin ? '/admin/dashboard' : '/admin/login');
                   setIsMobileMenuOpen(false);
                 }}
-                className="justify-start hover:bg-primary/10 hover:text-primary py-3"
+                className="justify-start hover:bg-primary/10 hover:text-primary py-2"
               >
-                <User className="h-4 w-4 mr-3" />
+                <User className="h-4 w-4 mr-2" />
                 {isAdmin ? 'Admin Dashboard' : 'Admin Login'}
               </Button>
               
               {/* Mobile Language Selector */}
-              <div className="pt-4 border-t border-border/50">
-                <p className="text-xs font-semibold text-muted-foreground mb-3">
+              <div className="pt-3 border-t border-border/50">
+                <p className="text-xs font-medium text-muted-foreground mb-2">
                   {isRTL ? "اللغة" : "Language"}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
@@ -289,12 +279,9 @@ export const Header = () => {
                         setLanguage(lang.code as any);
                         setIsMobileMenuOpen(false);
                       }}
-                      className={cn(
-                        "text-xs flex flex-col items-center py-3 h-auto",
-                        language === lang.code && "bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
-                      )}
+                      className="text-xs flex flex-col items-center py-2 h-auto"
                     >
-                      <span className="text-lg mb-1">{lang.flag}</span>
+                      <span className="text-base mb-1">{lang.flag}</span>
                       <span>{lang.name}</span>
                     </Button>
                   ))}
